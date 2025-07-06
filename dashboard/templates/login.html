@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Monero Miner</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-image: url('https://images.unsplash.com/photo-1555949963-aa79dcee981b'); /* tech system bg */
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .login-box {
+      background: rgba(0, 0, 0, 0.75);
+      padding: 40px;
+      border-radius: 12px;
+      width: 300px;
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    h3 {
+      margin-top: 5px;
+      font-weight: normal;
+      color: #ccc;
+    }
+
+    form {
+      margin-top: 30px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 6px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: #00b894;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .loading {
+      display: none;
+      margin-top: 20px;
+      color: #00e676;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1>Gibson Walker</h1>
+    <h3>Mines</h3>
+
+    <form method="post" id="login-form">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Login</button>
+      <div class="loading" id="loading">Logging in...</div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('login-form');
+    const loading = document.getElementById('loading');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      loading.style.display = 'block';
+      setTimeout(() => {
+        form.submit();
+      }, 3000);
+    });
+  </script>
+</body>
+</html>

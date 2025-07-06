@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gibson Walker Mining Dashboard</title>
+  <style>
+    body {
+      background-color: #0d0d0d;
+      color: #00ffcc;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header, .footer {
+      text-align: center;
+      border: 1px solid #00ffcc;
+      padding: 15px;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .welcome {
+      text-align: center;
+      margin: 30px 0;
+      font-size: 18px;
+      color: #ffffff;
+    }
+
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      margin-bottom: 30px;
+    }
+
+    .buttons form {
+      flex: 1;
+      min-width: 150px;
+      margin: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      background: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #00ddb3;
+    }
+
+    .logs {
+      background-color: #111;
+      border: 1px solid #00ffcc;
+      padding: 20px;
+      height: 300px;
+      overflow-y: scroll;
+      font-size: 14px;
+      white-space: pre-wrap;
+      border-radius: 10px;
+    }
+
+    .stop-screen {
+      display: none;
+      font-size: 24px;
+      text-align: center;
+      padding: 60px;
+      color: red;
+      font-weight: bold;
+    }
+
+    .emoji {
+      font-size: 22px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">GIBSON WALKER MINES</div>
+
+    <div class="welcome">
+      Welcome, <strong>{{ user.username }}</strong> — Monitor and control your mining operations.
+    </div>
+
+    <div class="buttons">
+      <form method="post" action="/start/" id="startForm">
+        {% csrf_token %}
+        <button type="submit">🟢 Start Mining</button>
+      </form>
+
+      <form method="post" action="/stop/" id="stopForm">
+        {% csrf_token %}
+        <button type="submit">🔴 Stop Mining</button>
+      </form>
+
+      <form method="post" action="/scheduler/start/">
+        {% csrf_token %}
+        <button type="submit">📆 Start Summary</button>
+      </form>
+
+      <form method="post" action="/scheduler/stop/">
+        {% csrf_token %}
+        <button type="submit">📴 Stop Summary</button>
+      </form>
+
+      <form method="post" action="/crash/start/">
+        {% csrf_token %}
+        <button type="submit">🚨 Start Monitor</button>
+      </form>
+
+      <form method="post" action="/crash/stop/">
+        {% csrf_token %}
+        <button type="submit">🧯 Stop Monitor</button>
+      </form>
+
+      <form action="/graph/" target="_blank">
+        <button type="submit">📉 View Hashrate Graph</button>
+      </form>
+    </div>
+
+    <div class="logs" id="logBox">
+      Click "Start Mining" to begin log output...
+    </div>
+
+    <div class="stop-screen" id="stopScreen">
+      <p>Stopping Gibson Walker Miner...</p>
+      <p><strong>MINING STOPPED</strong></p>
+      <h1>GOODBYE</h1>
+    </div>
+
+    <div class="footer">© 2025 Gibson Walker Systems</div>
+  </div>
+
+  <script>
+    const logBox = document.getElementById('logBox');
+    const stopScreen = document.getElementById('stopScreen');
+    let logInterval;
+    let progress = 0;
+
+    const logs = [
+      "Connecting to blockchain network...",
+      "Extracting mining modules...",
+      "Synchronizing with Monero nodes..."
+    ];
+
+    const fakeLogs = [
+      "[✓] Node synced",
+      "[✓] Transaction validated",
+      "[✓] Mining thread #3 initialized",
+      "[✓] GPU warming up...",
+      "[✓] Connection secured",
+      "[✓] Receiving new jobs...",
+      "[✓] Hashrate stable",
+      "[✓] Reward block pending"
+    ];
+
+    function renderLogs(callback) {
+      logBox.innerHTML = "Starting miner engine...<br>";
+      progress = 0;
+      stopScreen.style.display = "none";
+      let step = 0;
+
+      const interval = setInterval(() => {
+        if (step < logs.length) {
+          logBox.innerHTML += logs[step] + "<br>";
+          step++;
+        } else if (progress <= 10) {
+          logBox.innerHTML += "&lt;".repeat(progress) + " " + (progress * 10) + "%<br>";
+          progress++;
+        } else {
+          clearInterval(interval);
+          logBox.innerHTML += "✅ Mining session started. <span class='emoji'>🚀</span><br><br>";
+          if (typeof callback === "function") callback();
+
+          logInterval = setInterval(() => {
+            const random = fakeLogs[Math.floor(Math.random() * fakeLogs.length)];
+            logBox.innerHTML += random + "<br>";
+            logBox.scrollTop = logBox.scrollHeight;
+          }, 1500);
+        }
+        logBox.scrollTop = logBox.scrollHeight;
+      }, 600);
+    }
+
+    document.getElementById('startForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      renderLogs(() => {
+        setTimeout(() => {
+          e.target.submit();
+        }, 100);
+      });
+    });
+
+    document.getElementById('stopForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      stopLogs();
+      setTimeout(() => {
+        e.target.submit();
+      }, 500);
+    });
+
+    function stopLogs() {
+      clearInterval(logInterval);
+      logBox.style.display = "none";
+      stopScreen.style.display = "block";
+    }
+  </script>
+</body>
+</html>
