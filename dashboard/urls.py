@@ -10,5 +10,7 @@ urlpatterns = [
     path("crash/start/", views.start_crash_monitor, name="start_crash"),
     path("crash/stop/", views.stop_crash_monitor, name="stop_crash"),
     path("graph/", views.plot_graph, name="plot_graph"),
+    path('graph/', views.graph_view, name='graph'),
+    path('graph/image/', views.graph_image, name='graph_image'),
 
 ]

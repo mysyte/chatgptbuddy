@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 DEBUG = True
-ALLOWED_HOSTS = ['oag-mines.onrender.com']
+ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,8 +72,16 @@ TIME_ZONE = os.getenv('TIME_ZONE', 'UTC')
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_REDIRECT_URL = '/dashboard/'

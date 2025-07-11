@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -129,8 +130,9 @@
         <button type="submit">🧯 Stop Monitor</button>
       </form>
 
-      <form action="/graph/" target="_blank">
-        <button type="submit">📉 View Hashrate Graph</button>
+      <form method="post" action="/graph/">
+        {% csrf_token %}
+        <button type="submit">🧯 Graph</button>
       </form>
     </div>
 
@@ -146,7 +148,6 @@
 
     <div class="footer">© 2025 Gibson Walker Systems</div>
   </div>
-
   <script>
     const logBox = document.getElementById('logBox');
     const stopScreen = document.getElementById('stopScreen');
@@ -185,7 +186,7 @@
           progress++;
         } else {
           clearInterval(interval);
-          logBox.innerHTML += "✅ Mining session started. <span class='emoji'>🚀</span><br><br>";
+          logBox.innerHTML += "✅ GIBSON WALKER your mining session started. <span class='emoji'>🚀</span><br><br>";
           if (typeof callback === "function") callback();
 
           logInterval = setInterval(() => {
@@ -217,9 +218,11 @@
 
     function stopLogs() {
       clearInterval(logInterval);
-      logBox.style.display = "none";
       stopScreen.style.display = "block";
     }
   </script>
+    
 </body>
 </html>
+
+update it;\

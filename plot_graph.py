@@ -1,39 +1,35 @@
 import matplotlib.pyplot as plt
-import matplotlib.animation as animation
+import re
 import os
 
-LOG_FILE = "miner_logs.txt"
-
-def extract_hashrate_from_line(line):
-    if "kH/s" in line:
-        try:
-            parts = line.split()
-            for part in parts:
-                if "kH/s" in part:
-                    return float(part.replace("kH/s", "").replace(",", ""))
-        except:
-            return None
-    return None
-
-def get_hashrate_data():
+def extract_hashrates(filename):
     hashrates = []
-    with open(LOG_FILE, "r") as file:
+    with open(filename, 'r') as file:
         for line in file:
-            rate = extract_hashrate_from_line(line)
-            if rate is not None:
-                hashrates.append(rate)
-    return hashrates[-50:]  # Last 50 entries
+            # match the line pattern with 10s hashrate only (first number after "15m")
+            match = re.search(r"15m\s+([0-9.]+)", line)
+            if match:
+                hashrate = float(match.group(1))
+                hashrates.append(hashrate)
+    return hashrates
 
-def animate(i):
-    data = get_hashrate_data()
-    ax.clear()
-    ax.plot(data)
-    ax.set_title("Live Monero Hashrate")
-    ax.set_ylabel("kH/s")
-    ax.set_xlabel("Time")
-    ax.grid(True)
+def plot():
+    data = extract_hashrates("miner_logs.txt")
+    if not data:
+        print("❌ No data to plot.")
+        return
 
-fig, ax = plt.subplots()
-ani = animation.FuncAnimation(fig, animate, interval=3000)  # Every 3 seconds
-plt.tight_layout()
-plt.show()
+    plt.figure(figsize=(12, 6))
+    plt.plot(data, marker='o', linestyle='-', color='green')
+    plt.title("Miner Hashrate (15m average)")
+    plt.xlabel("Log Entry")
+    plt.ylabel("Hashrate (H/s)")
+    plt.grid(True)
+    plt.tight_layout()
+
+    output_path = "/home/ec2-user/minerportal/static/hashrate.png"
+    os.makedirs(os.path.dirname(output_path), exist_ok=True)
+    plt.savefig(output_path)
+    print("✅ Graph saved to", output_path)
+
+plot()

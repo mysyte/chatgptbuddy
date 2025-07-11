@@ -1,90 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Monero Hashrate Graph</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      background-color: #0d0d0d;
-      color: #00ffcc;
-      font-family: 'Courier New', monospace;
-      margin: 0;
-      padding: 40px;
-      text-align: center;
-    }
-
-    h1 {
-      margin-bottom: 40px;
-      color: #00ffcc;
-    }
-
-    #hashrateChart {
-      max-width: 900px;
-      margin: auto;
-      background: #111;
-      border: 1px solid #00ffcc;
-      padding: 20px;
-      border-radius: 12px;
-    }
-
-    canvas {
-      background-color: #1a1a1a;
-      border-radius: 12px;
-    }
-  </style>
+    <title>Live Hashrate Graph</title>
 </head>
-<body>
-  <h1>Monero Hashrate (kH/s)</h1>
-  <div id="hashrateChart">
-    <canvas id="chartCanvas" width="800" height="400"></canvas>
-  </div>
-
-  <script>
-    const ctx = document.getElementById('chartCanvas').getContext('2d');
-    const chart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['00:00', '02:00', '04:00', '06:00', '08:00', '10:00', '12:00'],
-        datasets: [{
-          label: 'Hashrate',
-          data: [250.2, 275.6, 260.8, 290.1, 310.5, 295.3, 320.9],
-          borderColor: '#00ffcc',
-          backgroundColor: 'rgba(0, 255, 204, 0.2)',
-          fill: true,
-          tension: 0.3,
-          pointRadius: 5,
-          pointBackgroundColor: '#00ffcc',
-        }]
-      },
-      options: {
-        scales: {
-          x: {
-            ticks: {
-              color: '#00ffcc'
-            },
-            grid: {
-              color: '#333'
-            }
-          },
-          y: {
-            ticks: {
-              color: '#00ffcc'
-            },
-            grid: {
-              color: '#333'
-            }
-          }
-        },
-        plugins: {
-          legend: {
-            labels: {
-              color: '#00ffcc'
-            }
-          }
-        }
-      }
-    });
-  </script>
+<body style="font-family: Arial, sans-serif; text-align: center; margin-top: 50px;">
+    <h1>📈 Mining Hashrate</h1>
+    <img src="/graph/image/" alt="Hashrate Graph" style="max-width:100%; border: 1px solid #00ffcc; padding: 5px;">
 </body>
 </html>
